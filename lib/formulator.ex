@@ -136,6 +136,10 @@ defmodule Formulator do
     options[:wrapper_class] || Application.get_env(:formulator, :wrapper_class)
   end
 
+  defp label_class(options) do
+    options[:class] || Application.get_env(:formulator, :label_class)
+  end
+
   defp extract_label_options(options) do
     label_options = options |> Keyword.get(:label, [])
     options = options |> Keyword.delete(:label)
@@ -149,7 +153,9 @@ defmodule Formulator do
     build_label(form, field, text: label_text)
   end
 
-  def build_label(form, field, label_options) do
+  def build_label(form, field, options) do
+    label_options = Keyword.put(options, :class, label_class(options))
+
     case label_options[:text] do
       nil -> label(form, field, label_options)
       text -> label(form, field, text, label_options |> Keyword.delete(:text))

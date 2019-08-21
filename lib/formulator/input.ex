@@ -5,7 +5,7 @@ defmodule Formulator.Input do
   def build_input(form, field, options, label_options, error \\ %HtmlError{}) do
     options = options ++ build_aria_label(field, label_options)
     input_type = options[:as] || :text
-    input_class = options[:class] || ""
+    input_class = build_input_class(options)
 
     options =
       options
@@ -82,6 +82,10 @@ defmodule Formulator.Input do
 
   defp format_label(field) do
     field |> to_string |> String.replace("_", " ") |> String.capitalize()
+  end
+
+  defp build_input_class(options) do
+    options[:class] || Application.get_env(:formulator, :input_class) || ""
   end
 
   defp input_function(:checkbox), do: :checkbox
